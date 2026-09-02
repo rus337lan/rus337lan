@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Песочница · Портфолио</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #e4e4e7;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: radial-gradient(circle at 20% 30%, #1a1a2e 0%, #0a0a0f 90%);
+            transition: background 0.5s;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            background: rgba(18, 18, 30, 0.7);
+            padding: 12px 20px;
+            border-radius: 60px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        nav a {
+            color: #a1a1aa;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        nav a:hover,
+        nav a.active {
+            background: rgba(124, 58, 237, 0.2);
+            color: #fff;
+        }
+        nav a.active {
+            background: #7c3aed;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
+        }
+        .nav-right {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .card {
+            background: rgba(18, 18, 30, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 40px;
+            padding: 45px 40px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .page-title span {
+            background: linear-gradient(135deg, #a78bfa, #6ee7b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .page-desc {
+            color: #a1a1aa;
+            margin-bottom: 30px;
+        }
+
+        /* ===== СЕТКА ПРИКОЛЮХ ===== */
+        .sandbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .toy {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 28px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+        .toy:hover {
+            border-color: #7c3aed;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .toy h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toy p {
+            color: #a1a1aa;
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+
+        /* ---- Приколюха 1: Счётчик ---- */
+        .counter-display {
+            font-size: 42px;
+            font-weight: 800;
+            text-align: center;
+            color: #a78bfa;
+        }
+        .counter-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .counter-btns button {
+            background: rgba(124, 58, 237, 0.2);
+            border: none;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .counter-btns button:hover {
+            background: #7c3aed;
+            transform: scale(1.1);
+        }
+
+        /* ---- Приколюха 2: Квадрат-бегунок ---- */
+        .runner-box {
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        .runner-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a78bfa, #6ee7b7);
+            position: absolute;
+            top: 12px;
+            left: 0;
+            transition: left 0.1s linear;
+            box-shadow: 0 0 30px rgba(167, 139, 250, 0.3);
+        }
+        .runner-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            justify-content: center;
+        }
+        .runner-controls button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 6px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+        .runner-controls button:hover {
+            background: rgba(124, 58, 237, 0.2);
+            border-color: #7c3aed;
+        }
+
+        /* ---- Приколюха 3: Цветовой генератор ---- */
+        .color-box {
+            width: 100%;
+            height: 80px;
+            border-radius: 16px;
+            background: #7c3aed;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+        .color-box:hover {
+            transform: scale(1.02);
+        }
+
+        /* ---- Приколюха 4: Мемо-игра ---- */
+        .memo-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .memo-card {
+            aspect-ratio: 1;
+            background: rgba(124, 58, 237, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            cursor: pointer;
+            transition: 0.25s;
+            user-select: none;
+        }
+        .memo-card:hover {
+            background: rgba(124, 58, 237, 0.3);
+            transform: scale(1.05);
+        }
+        .memo-card.flipped {
+            background: rgba(124, 58, 237, 0.4);
+            border-color: #7c3aed;
+        }
+        .memo-card.matched {
+            background: rgba(110, 231, 183, 0.15);
+            border-color: #6ee7b7;
+            cursor: default;
+            opacity: 0.6;
+        }
+        .memo-score {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #a1a1aa;
+        }
+
+        /* ---- Приколюха 5: Консоль-принтер ---- */
+        .console-log {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #6ee7b7;
+            min-height: 60px;
+            max-height: 100px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            line-height: 1.8;
+        }
+        .console-log .log-entry {
+            opacity: 0.8;
+        }
+        .console-log .log-entry i {
+            margin-right: 6px;
+        }
+        .console-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .console-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #a1a1aa;
+            padding: 6px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .console-actions button:hover {
+            background: rgba(124, 58, 237, 0.2);
+            color: #fff;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 60px;
+            padding: 8px 18px;
+            color: #e4e4e7;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #7c3aed;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 25px 18px;
+            }
+            .sandbox-grid {
+                grid-template-columns: 1fr;
+            }
+            nav {
+                border-radius: 20px;
+                padding: 10px 14px;
+            }
+            nav a {
+                padding: 6px 14px;
+                font-size: 12px;
+            }
+            .nav-right {
+                margin-left: 0;
+                width: 100%;
+            }
+            .memo-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <nav>
+            <a href="index.html"><i class="fas fa-home"></i> Главная</a>
+            <a href="projects.html"><i class="fas fa-folder-open"></i> Проекты</a>
+            <a href="sandbox.html" class="active"><i class="fas fa-flask"></i> Песочница</a>
+            <div class="nav-right">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i> <span id="themeLabel">Тёмная</span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="card">
+
+            <div class="page-title">🧪 <span>Песочница</span></div>
+            <div class="page-desc">Коллекция интерактивных приколюх, чтобы развлечь HR</div>
+
+            <div class="sandbox-grid">
+
+                <!-- ===== ПРИКОЛЮХА 1: СЧЁТЧИК ===== -->
+                <div class="toy">
+                    <h3><i class="fas fa-calculator" style="color:#a78bfa;"></i> Счётчик</h3>
+                    <p>Нажимай и смотри</p>
+                    <div class="counter-display" id="counterDisplay">0</div>
+                    <div class="counter-btns">
+                        <button id="counterMinus">−</button>
+                        <button id="counterPlus">+</button>
+                        <button id="counterReset" style="background:rgba(255,255,255,0.05); width:auto; padding:0 16px; border-radius:40px; font-size:13px;">↺</button>
+                    </div>
+                </div>
+
+                <!-- ===== ПРИКОЛЮХА 2: БЕГУНОК ===== -->
+                <div class="toy">
+                    <h3><i class="fas fa-arrow-right" style="color:#6ee7b7;"></i> Бегунок</h3>
+                    <p>Управляй движением</p>
+                    <div class="runner-box">
+                        <div class="runner-dot" id="runnerDot" style="left:0;"></div>
+                    </div>
+                    <div class="runner-controls">
+                        <button id="runnerLeft">◀ Лево</button>
+                        <button id="runnerRight">Право ▶</button>
+                        <button id="runnerStop">⏹ Стоп</button>
+                    </div>
+                </div>
+
+                <!-- ===== ПРИКОЛЮХА 3: ГЕНЕРАТОР ЦВЕТА ===== -->
+                <div class="toy">
+                    <h3><i class="fas fa-palette" style="color:#f472b6;"></i> Цвет</h3>
+                    <p>Кликни — смени цвет</p>
+                    <div class="color-box" id="colorBox">#7c3aed</div>
+                </div>
+
+                <!-- ===== ПРИКОЛЮХА 4: МЕМО ===== -->
+                <div class="toy">
+                    <h3><i class="fas fa-brain" style="color:#fbbf24;"></i> Мемо-игра</h3>
+                    <p>Найди пары</p>
+                    <div class="memo-grid" id="memoGrid"></div>
+                    <div class="memo-score" id="memoScore">Попыток: 0</div>
+                </div>
+
+                <!-- ===== ПРИКОЛЮХА 5: КОНСОЛЬ ===== -->
+                <div class="toy">
+                    <h3><i class="fas fa-terminal" style="color:#6ee7b7;"></i> Логгер</h3>
+                    <p>Имитация консоли</p>
+                    <div class="console-log" id="consoleLog">
+                        <div class="log-entry"><i class="fas fa-check-circle" style="color:#6ee7b7;"></i> Готов к работе</div>
+                    </div>
+                    <div class="console-actions">
+                        <button id="logInfo"><i class="fas fa-info-circle"></i> Info</button>
+                        <button id="logWarn"><i class="fas fa-exclamation-triangle" style="color:#fbbf24;"></i> Warn</button>
+                        <button id="logError"><i class="fas fa-times-circle" style="color:#f472b6;"></i> Error</button>
+                        <button id="logClear">Очистить</button>
+                    </div>
+                </div>
+
+                <!-- ===== ПРИКОЛЮХА 6: ТАЙМЕР ===== -->
+                <div class="toy">
+                    <h3><i class="fas fa-clock" style="color:#a78bfa;"></i> Таймер</h3>
+                    <p>Секундомер с паузой</p>
+                    <div style="font-size:36px; font-weight:700; text-align:center; font-variant-numeric:tabular-nums;" id="timerDisplay">00:00</div>
+                    <div style="display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap;">
+                        <button id="timerStart" style="background:rgba(110,231,183,0.15); border:1px solid rgba(110,231,183,0.2); color:#6ee7b7; padding:8px 24px; border-radius:40px; cursor:pointer; font-family:'Inter',sans-serif; font-weight:600;">▶ Старт</button>
+                        <button id="timerPause" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.06); color:#a1a1aa; padding:8px 24px; border-radius:40px; cursor:pointer; font-family:'Inter',sans-serif;">⏸ Пауза</button>
+                        <button id="timerReset" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.06); color:#a1a1aa; padding:8px 24px; border-radius:40px; cursor:pointer; font-family:'Inter',sans-serif;">↺ Сброс</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ПРИКОЛЮХА 1: СЧЁТЧИК (с localStorage)
+        // ============================================================
+        let counter = parseInt(localStorage.getItem('sandboxCounter')) || 0;
+        const counterDisplay = document.getElementById('counterDisplay');
+        counterDisplay.textContent = counter;
+
+        document.getElementById('counterPlus').addEventListener('click', () => {
+            counter++;
+            updateCounter();
+        });
+        document.getElementById('counterMinus').addEventListener('click', () => {
+            counter--;
+            updateCounter();
+        });
+        document.getElementById('counterReset').addEventListener('click', () => {
+            counter = 0;
+            updateCounter();
+        });
+
+        function updateCounter() {
+            counterDisplay.textContent = counter;
+            localStorage.setItem('sandboxCounter', counter);
+        }
+
+        // ============================================================
+        // ПРИКОЛЮХА 2: БЕГУНОК
+        // ============================================================
+        const runnerDot = document.getElementById('runnerDot');
+        let runnerPos = 0;
+        let runnerInterval = null;
+
+        function moveRunner(dir) {
+            if (runnerInterval) {
+                clearInterval(runnerInterval);
+                runnerInterval = null;
+            }
+            runnerInterval = setInterval(() => {
+                runnerPos += dir * 2;
+                if (runnerPos < 0) runnerPos = 0;
+                if (runnerPos > 300) runnerPos = 300;
+                runnerDot.style.left = runnerPos + 'px';
+            }, 30);
+        }
+
+        document.getElementById('runnerLeft').addEventListener('click', () => moveRunner(-1));
+        document.getElementById('runnerRight').addEventListener('click', () => moveRunner(1));
+        document.getElementById('runnerStop').addEventListener('click', () => {
+            if (runnerInterval) {
+                clearInterval(runnerInterval);
+                runnerInterval = null;
+            }
+        });
+
+        // ============================================================
+        // ПРИКОЛЮХА 3: ГЕНЕРАТОР ЦВЕТА
+        // ============================================================
+        const colorBox = document.getElementById('colorBox');
+
+        function randomColor() {
+            const hex = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+            colorBox.style.background = hex;
+            colorBox.textContent = hex;
+        }
+        colorBox.addEventListener('click', randomColor);
+        // первый цвет
+        randomColor();
+
+        // ============================================================
+        // ПРИКОЛЮХА 4: МЕМО-ИГРА
+        // ============================================================
+        const emojis = ['🚀', '⭐', '🔥', '💻', '🎯', '🤖', '👾', '🌈'];
+        let memoCards = [];
+        let flipped = [];
+        let matched = [];
+        let memoMoves = 0;
+        let memoLocked = false;
+
+        function initMemo() {
+            const grid = document.getElementById('memoGrid');
+            const doubled = [...emojis, ...emojis];
+            // перемешиваем
+            for (let i = doubled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [doubled[i], doubled[j]] = [doubled[j], doubled[i]];
+            }
+            memoCards = doubled;
+            flipped = [];
+            matched = [];
+            memoMoves = 0;
+            memoLocked = false;
+            document.getElementById('memoScore').textContent = 'Попыток: 0';
+            renderMemo();
+        }
+
+        function renderMemo() {
+            const grid = document.getElementById('memoGrid');
+            grid.innerHTML = memoCards.map((emoji, idx) => {
+                const isFlipped = flipped.includes(idx);
+                const isMatched = matched.includes(idx);
+                let cls = 'memo-card';
+                if (isMatched) cls += ' matched';
+                else if (isFlipped) cls += ' flipped';
+                return `<div class="${cls}" data-index="${idx}">${isFlipped || isMatched ? emoji : '❓'}</div>`;
+            }).join('');
+
+            grid.querySelectorAll('.memo-card').forEach(el => {
+                if (el.classList.contains('matched')) return;
+                el.addEventListener('click', () => handleMemoClick(parseInt(el.dataset.index)));
+            });
+        }
+
+        function handleMemoClick(idx) {
+            if (memoLocked) return;
+            if (flipped.includes(idx) || matched.includes(idx)) return;
+            if (flipped.length === 2) return;
+
+            flipped.push(idx);
+            memoMoves++;
+            document.getElementById('memoScore').textContent = `Попыток: ${memoMoves}`;
+            renderMemo();
+
+            if (flipped.length === 2) {
+                memoLocked = true;
+                const [i1, i2] = flipped;
+                if (memoCards[i1] === memoCards[i2]) {
+                    matched.push(i1, i2);
+                    flipped = [];
+                    memoLocked = false;
+                    renderMemo();
+                    if (matched.length === memoCards.length) {
+                        setTimeout(() => alert('🎉 Поздравляю! Ты нашёл все пары!'), 300);
+                    }
+                } else {
+                    setTimeout(() => {
+                        flipped = [];
+                        memoLocked = false;
+                        renderMemo();
+                    }, 700);
+                }
+            }
+        }
+
+        initMemo();
+
+        // ============================================================
+        // ПРИКОЛЮХА 5: КОНСОЛЬ-ЛОГГЕР
+        // ============================================================
+        const consoleLog = document.getElementById('consoleLog');
+        const logMessages = [];
+
+        function addLog(msg, type = 'info') {
+            const icons = {
+                info: 'fa-info-circle',
+                warn: 'fa-exclamation-triangle',
+                error: 'fa-times-circle'
+            };
+            const colors = {
+                info: '#6ee7b7',
+                warn: '#fbbf24',
+                error: '#f472b6'
+            };
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<i class="fas ${icons[type]}" style="color:${colors[type]};"></i> ${msg}`;
+            consoleLog.appendChild(entry);
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+            if (consoleLog.children.length > 15) {
+                consoleLog.removeChild(consoleLog.firstChild);
+            }
+        }
+
+        document.getElementById('logInfo').addEventListener('click', () => addLog('Информационное сообщение', 'info'));
+        document.getElementById('logWarn').addEventListener('click', () => addLog('Предупреждение!', 'warn'));
+        document.getElementById('logError').addEventListener('click', () => addLog('Критическая ошибка!', 'error'));
+        document.getElementById('logClear').addEventListener('click', () => {
+            consoleLog.innerHTML = '<div class="log-entry"><i class="fas fa-check-circle" style="color:#6ee7b7;"></i> Лог очищен</div>';
+        });
+
+        // ============================================================
+        // ПРИКОЛЮХА 6: ТАЙМЕР
+        // ============================================================
+        let timerSeconds = 0;
+        let timerInterval = null;
+        let timerRunning = false;
+        const timerDisplay = document.getElementById('timerDisplay');
+
+        function formatTime(sec) {
+            const m = String(Math.floor(sec / 60)).padStart(2, '0');
+            const s = String(sec % 60).padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateTimerDisplay() {
+            timerDisplay.textContent = formatTime(timerSeconds);
+        }
+
+        document.getElementById('timerStart').addEventListener('click', () => {
+            if (timerRunning) return;
+            timerRunning = true;
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                updateTimerDisplay();
+            }, 1000);
+        });
+
+        document.getElementById('timerPause').addEventListener('click', () => {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                timerRunning = false;
+            }
+        });
+
+        document.getElementById('timerReset').addEventListener('click', () => {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                timerRunning = false;
+            }
+            timerSeconds = 0;
+            updateTimerDisplay();
+        });
+
+        // ============================================================
+        // ТЕМА (общая для всех страниц)
+        // ============================================================
+        let isDark = true;
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            isDark = !isDark;
+            document.body.style.background = isDark ? '#0a0a0f' : '#f0f0f5';
+            document.body.style.backgroundImage = isDark ?
+                'radial-gradient(circle at 20% 30%, #1a1a2e 0%, #0a0a0f 90%)' :
+                'radial-gradient(circle at 20% 30%, #e0e0f0 0%, #f0f0f5 90%)';
+            document.querySelector('.card').style.background = isDark ?
+                'rgba(18,18,30,0.8)' :
+                'rgba(255,255,255,0.8)';
+            document.querySelector('.card').style.color = isDark ? '#e4e4e7' : '#1a1a2e';
+            document.getElementById('themeLabel').textContent = isDark ? 'Тёмная' : 'Светлая';
+            this.querySelector('i').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+        });
+    </script>
+
+</body>
+</html>
